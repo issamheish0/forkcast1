@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { SignOutButton } from "@/components/sign-out-button";
+import { MobileNav } from "@/components/mobile-nav";
 
 export default async function DashboardLayout({
   children,
@@ -37,6 +38,8 @@ export default async function DashboardLayout({
         <nav className="mt-8 flex flex-col gap-1">
           <NavLink href="/dashboard">Overview</NavLink>
           <NavLink href="/dashboard/bookings">Bookings</NavLink>
+          <NavLink href="/dashboard/analytics">Analytics</NavLink>
+          <NavLink href="/dashboard/customers">Customers</NavLink>
           <NavLink href="/dashboard/settings">Settings</NavLink>
         </nav>
 

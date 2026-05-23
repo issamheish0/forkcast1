@@ -1608,7 +1608,12 @@ function AuthContent({ children }: PropsWithChildren) {
         if (!isMounted) return;
 
         if (error) {
-          // Error getting session
+          // If the stored refresh token is invalid, clear the session locally
+          const msg = error.message?.toLowerCase() ?? '';
+          if (msg.includes('refresh token') || msg.includes('invalid token') || error.status === 400) {
+            await supabase.auth.signOut({ scope: 'local' }).catch(() => {});
+            if (isMounted) setInitialized(true);
+          }
         } else if (session) {
           // Session found during initialization
           setSession(session);
@@ -1688,6 +1693,18 @@ function AuthContent({ children }: PropsWithChildren) {
 
       // Check if component is still mounted before updating state
       if (!isMounted) return;
+
+      // Refresh token is invalid or expired — clear the bad session locally
+      if (event === 'TOKEN_REFRESH_FAILED') {
+        await supabase.auth.signOut({ scope: 'local' }).catch(() => {});
+        if (isMounted) {
+          setSession(null);
+          setUser(null);
+          setProfile(null);
+          setIsGuest(false);
+        }
+        return;
+      }
 
       try {
         if (session) {

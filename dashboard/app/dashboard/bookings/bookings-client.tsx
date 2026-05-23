@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { format } from "date-fns";
-import { Check, Clock, Filter, RefreshCw, Users, X } from "lucide-react";
+import { Check, Clock, Filter, RefreshCw, Users, Wifi, WifiOff, X } from "lucide-react";
 import { toast } from "sonner";
 import { getBrowserSupabase } from "@/lib/supabase/client";
 import { Booking, BookingStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
+
+type RealtimeStatus = "connecting" | "live" | "error";
 
 const TABS: { key: BookingStatus | "all"; label: string }[] = [
   { key: "pending", label: "Pending" },
@@ -30,11 +32,33 @@ export function BookingsClient({
   const [activeTab, setActiveTab] = useState<BookingStatus | "all">("pending");
   const [search, setSearch] = useState("");
   const [refreshing, setRefreshing] = useState(false);
+  const [realtimeStatus, setRealtimeStatus] = useState<RealtimeStatus>("connecting");
+  // IDs of bookings that arrived via realtime (cleared after 8 s)
+  const [newBookingIds, setNewBookingIds] = useState<Set<string>>(new Set());
+  const newIdTimers = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
   const supabase = getBrowserSupabase();
+
+  const markNew = useCallback((id: string) => {
+    setNewBookingIds((cur) => new Set(cur).add(id));
+    // clear existing timer if booking arrives twice
+    const existing = newIdTimers.current.get(id);
+    if (existing) clearTimeout(existing);
+    const timer = setTimeout(() => {
+      setNewBookingIds((cur) => {
+        const next = new Set(cur);
+        next.delete(id);
+        return next;
+      });
+      newIdTimers.current.delete(id);
+    }, 8000);
+    newIdTimers.current.set(id, timer);
+  }, []);
 
   // Realtime subscription on bookings for these restaurants
   useEffect(() => {
     if (!restaurantIds.length) return;
+    setRealtimeStatus("connecting");
+
     const channel = supabase
       .channel("dashboard-bookings")
       .on(
@@ -46,7 +70,6 @@ export function BookingsClient({
           filter: `restaurant_id=in.(${restaurantIds.join(",")})`,
         },
         async (payload) => {
-          // Re-fetch the affected row with joins
           const id =
             (payload.new as any)?.id ?? (payload.old as any)?.id;
           if (!id) return;
@@ -56,6 +79,7 @@ export function BookingsClient({
             return;
           }
 
+          // Re-fetch the affected row with full joins
           const { data } = await supabase
             .from("bookings")
             .select(
@@ -65,20 +89,66 @@ export function BookingsClient({
             .maybeSingle();
           if (!data) return;
 
+          const booking = data as unknown as Booking;
+          const guestName = booking.user?.full_name ?? "Guest";
+
           setBookings((cur) => {
             const idx = cur.findIndex((b) => b.id === id);
-            if (idx === -1) return [data as any, ...cur];
+            if (idx === -1) return [booking, ...cur];
             const next = cur.slice();
-            next[idx] = data as any;
+            next[idx] = booking;
             return next;
           });
 
           if (payload.eventType === "INSERT") {
-            toast.info(`New booking from ${(data as any).user?.full_name ?? "guest"}`);
+            markNew(id);
+            if (booking.status === "pending") {
+              toast("New booking request", {
+                description: `${guestName} · ${booking.party_size} guest${booking.party_size !== 1 ? "s" : ""} · ${format(new Date(booking.booking_time), "EEE d MMM 'at' h:mm a")}`,
+                duration: 10000,
+                action: {
+                  label: "Review",
+                  onClick: () => setActiveTab("pending"),
+                },
+              });
+              // Play a brief audio ping using the Web Audio API (no file needed)
+              try {
+                const ctx = new AudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = 880;
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.6);
+              } catch {
+                // AudioContext may be blocked until user interaction — silent fail
+              }
+            }
+          } else if (payload.eventType === "UPDATE") {
+            const oldStatus = (payload.old as any)?.status as BookingStatus | undefined;
+            const newStatus = booking.status;
+            if (oldStatus && oldStatus !== newStatus) {
+              const msgs: Partial<Record<BookingStatus, { fn: typeof toast; text: string }>> = {
+                confirmed: { fn: toast.success, text: `Booking confirmed for ${guestName}` },
+                declined:  { fn: toast.warning, text: `You declined ${guestName}'s booking` },
+                cancelled: { fn: toast.warning, text: `${guestName} cancelled their booking` },
+                completed: { fn: toast.success, text: `${guestName}'s booking completed` },
+              };
+              const m = msgs[newStatus];
+              if (m) m.fn(m.text);
+            }
           }
         },
       )
-      .subscribe();
+      .subscribe((status) => {
+        if (status === "SUBSCRIBED") setRealtimeStatus("live");
+        else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED")
+          setRealtimeStatus("error");
+        else setRealtimeStatus("connecting");
+      });
 
     return () => {
       supabase.removeChannel(channel);
@@ -142,7 +212,45 @@ export function BookingsClient({
     <div className="p-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold">Bookings</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-bold">Bookings</h1>
+            {/* Realtime connection badge */}
+            <span
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium",
+                realtimeStatus === "live" && "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400",
+                realtimeStatus === "connecting" && "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400",
+                realtimeStatus === "error" && "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400",
+              )}
+              title={
+                realtimeStatus === "live"
+                  ? "Real-time updates active"
+                  : realtimeStatus === "connecting"
+                  ? "Connecting to real-time..."
+                  : "Real-time disconnected — refresh to reconnect"
+              }
+            >
+              {realtimeStatus === "live" ? (
+                <>
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
+                  </span>
+                  Live
+                </>
+              ) : realtimeStatus === "connecting" ? (
+                <>
+                  <Wifi size={12} className="animate-pulse" />
+                  Connecting
+                </>
+              ) : (
+                <>
+                  <WifiOff size={12} />
+                  Offline
+                </>
+              )}
+            </span>
+          </div>
           <p className="mt-1 text-sm text-muted-foreground">
             {restaurants.map((r) => r.name).join(" · ")}
           </p>
@@ -200,7 +308,7 @@ export function BookingsClient({
           </div>
         ) : (
           filtered.map((b) => (
-            <BookingRow key={b.id} booking={b} onSetStatus={setStatus} />
+            <BookingRow key={b.id} booking={b} isNew={newBookingIds.has(b.id)} onSetStatus={setStatus} />
           ))
         )}
       </div>
@@ -210,14 +318,23 @@ export function BookingsClient({
 
 function BookingRow({
   booking,
+  isNew,
   onSetStatus,
 }: {
   booking: Booking;
+  isNew?: boolean;
   onSetStatus: (b: Booking, s: BookingStatus) => void;
 }) {
   const dt = new Date(booking.booking_time);
   return (
-    <div className="rounded-2xl border border-border bg-card p-4">
+    <div
+      className={cn(
+        "rounded-2xl border bg-card p-4 transition-all duration-500",
+        isNew
+          ? "border-green-400 ring-2 ring-green-400/40 shadow-[0_0_0_4px_rgba(74,222,128,0.15)] animate-pulse-once"
+          : "border-border",
+      )}
+    >
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">

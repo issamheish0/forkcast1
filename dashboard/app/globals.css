@@ -26,3 +26,12 @@ body {
   background-color: var(--color-background);
   color: var(--color-foreground);
 }
+
+@keyframes pulse-once {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.animate-pulse-once {
+  animation: pulse-once 1.2s ease-in-out 2;
+}

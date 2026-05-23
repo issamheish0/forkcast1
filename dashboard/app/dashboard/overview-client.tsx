@@ -10,13 +10,17 @@ import { Booking, BookingStatus } from "@/lib/types";
 type Counts = { pending: number; confirmed: number; today: number };
 type RealtimeStatus = "connecting" | "live" | "error";
 
-const STATUS_STYLES: Record<BookingStatus, string> = {
-  pending:   "bg-warning/15 text-warning",
-  confirmed: "bg-success/15 text-success",
-  completed: "bg-primary/15 text-primary",
-  declined:  "bg-destructive/15 text-destructive",
-  cancelled: "bg-muted text-muted-foreground",
-};
+function getStatusStyle(status: BookingStatus): React.CSSProperties {
+  const map: Record<BookingStatus, { bg: string; fg: string }> = {
+    pending:   { bg: "var(--color-warning)",          fg: "var(--color-warning)" },
+    confirmed: { bg: "var(--color-success)",          fg: "var(--color-success)" },
+    completed: { bg: "var(--color-primary)",          fg: "var(--color-primary)" },
+    declined:  { bg: "var(--color-destructive)",      fg: "var(--color-destructive)" },
+    cancelled: { bg: "var(--color-muted-foreground)", fg: "var(--color-muted-foreground)" },
+  };
+  const { bg, fg } = map[status] ?? map.cancelled;
+  return { backgroundColor: `color-mix(in srgb, ${bg} 15%, transparent)`, color: fg };
+}
 
 export function OverviewClient({
   restaurantIds,
@@ -161,9 +165,8 @@ export function OverviewClient({
                   </p>
                 </div>
                 <span
-                  className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${
-                    STATUS_STYLES[b.status] ?? "bg-muted text-muted-foreground"
-                  }`}
+                  style={getStatusStyle(b.status)}
+                  className="shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium capitalize"
                 >
                   {b.status}
                 </span>

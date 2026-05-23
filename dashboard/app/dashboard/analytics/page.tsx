@@ -11,12 +11,12 @@ import {
 import { RangeTabs } from "./range-tabs";
 import { BookingStatus } from "@/lib/types";
 
-const STATUS_COLORS: Record<BookingStatus, string> = {
-  pending:   "bg-warning",
-  confirmed: "bg-success",
-  completed: "bg-primary",
-  declined:  "bg-destructive",
-  cancelled: "bg-muted-foreground",
+const STATUS_CSS_VARS: Record<BookingStatus, string> = {
+  pending:   "var(--color-warning)",
+  confirmed: "var(--color-success)",
+  completed: "var(--color-primary)",
+  declined:  "var(--color-destructive)",
+  cancelled: "var(--color-muted-foreground)",
 };
 const STATUS_LABELS: Record<BookingStatus, string> = {
   pending:   "Pending",
@@ -67,7 +67,7 @@ export default async function AnalyticsPage({
     .from("bookings")
     .select("id, status, party_size, booking_time, created_at")
     .in("restaurant_id", restaurantIds)
-    .gte("booking_time", since.toISOString())
+    .gte("created_at", since.toISOString())
     .order("booking_time", { ascending: true });
 
   const all = bookings ?? [];
@@ -185,8 +185,11 @@ export default async function AnalyticsPage({
                 </span>
                 <div className="flex-1 h-3 rounded-full bg-secondary overflow-hidden">
                   <div
-                    className={`h-full rounded-full transition-all ${STATUS_COLORS[status as BookingStatus]}`}
-                    style={{ width: `${total > 0 ? (count / total) * 100 : 0}%` }}
+                    className="h-full rounded-full transition-all"
+                    style={{
+                      width: `${total > 0 ? (count / total) * 100 : 0}%`,
+                      backgroundColor: STATUS_CSS_VARS[status as BookingStatus],
+                    }}
                   />
                 </div>
                 <span className="w-8 text-right text-sm font-semibold tabular-nums">

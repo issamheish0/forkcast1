@@ -1,0 +1,898 @@
+/* app/globals.css */
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Light mode only - no dark mode support */
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Safe area inset bridge for JS access */
+    --safe-area-inset-top: env(safe-area-inset-top, 0px);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-inset-left: env(safe-area-inset-left, 0px);
+    --safe-area-inset-right: env(safe-area-inset-right, 0px);
+
+    /* New Brand Color Palette */
+    --background: 45 29% 97%; /* off white */
+    --foreground: 345 55% 31%; /* Mulberry Velvet */
+    --card: 25 50% 96%; /* Light Blushed Linen */
+    --card-foreground: 345 55% 31%; /* Mulberry Velvet */
+    --popover: 0 0% 100%;
+    --popover-foreground: 345 55% 31%; /* Mulberry Velvet */
+    --primary: 345 55% 31%; /* Mulberry Velvet */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 25 100% 94%; /* Blushed Linen */
+    --secondary-foreground: 345 55% 31%; /* Mulberry Velvet */
+    --muted: 25 50% 96%; /* Lighter Blushed Linen */
+    --muted-foreground: 0 0% 47%; /* Charcoal Mood */
+    --accent: 295 30% 81%; /* Lavender Fog */
+    --accent-foreground: 345 55% 31%; /* Mulberry Velvet */
+    --destructive: 0 80% 57.70%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 25 30% 88%; /* Subtle Blushed Linen */
+    --input: 25 30% 88%; /* Subtle Blushed Linen */
+    --ring: 345 55% 31%; /* Mulberry Velvet */
+    --radius: 0.5rem;
+
+    /* Table Status Colors - Floorplan View */
+    --status-available: 142 71% 45%;
+    --status-taken: 0 84% 55%;
+    --status-overstay: 30 95% 50%;
+    --status-reserved: 38 92% 50%;
+    --status-seated: 0 84% 55%;
+    --status-dirty: 0 84% 60%;
+    --status-blocked: 215 16% 55%;
+    --status-highlight: 45 93% 50%;
+
+    /* Booking Status Colors */
+    --booking-pending: 38 92% 50%;
+    --booking-confirmed: 142 71% 45%;
+    --booking-seated: 217 91% 60%;
+    --booking-completed: 215 16% 47%;
+    --booking-noshow: 0 84% 60%;
+    --booking-cancelled: 0 0% 60%;
+
+    /* Decor Element Colors - Floorplan Canvas */
+    --decor-plant: 141 79% 85%;
+    --decor-wall: 220 9% 83%;
+    --decor-pillar: 27 98% 83%;
+    --decor-entrance: 0 100% 94%;
+    --decor-host-stand: 45 97% 58%;
+    --decor-restroom: 214 95% 93%;
+    --decor-window: 187 92% 82%;
+    --decor-bar-counter: 27 98% 83%;
+    --decor-default: 220 14% 96%;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(222 47% 11% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(222 47% 11% / 0.07), 0 2px 4px -2px hsl(222 47% 11% / 0.05);
+    --shadow-lg: 0 10px 15px -3px hsl(222 47% 11% / 0.08), 0 4px 6px -4px hsl(222 47% 11% / 0.05);
+    --shadow-card: 0 1px 3px 0 hsl(222 47% 11% / 0.06), 0 1px 2px -1px hsl(222 47% 11% / 0.06);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+  
+  input,
+  textarea,
+  select,
+  [role="combobox"] {
+    box-sizing: border-box;
+    outline: none !important;
+  }
+  
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none !important;
+    box-shadow: inset 0 0 0 2px hsl(345 55% 31%) !important;
+    ring: none !important;
+  }
+  
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="tel"]:focus,
+  input[type="number"]:focus,
+  textarea:focus {
+    outline: none !important;
+    box-shadow: inset 0 0 0 2px hsl(345 55% 31%) !important;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Notification animations */
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Kitchen Operations Specific Styles */
+@layer components {
+  /* Kitchen Display System */
+  .kitchen-display {
+    @apply h-screen flex flex-col bg-background overflow-hidden;
+  }
+
+  .kitchen-header {
+    @apply bg-card border-b border-border px-4 py-3 flex items-center justify-between;
+  }
+
+  .kitchen-station-tabs {
+    @apply bg-card border-b border-border px-4 py-2;
+  }
+
+  /* Order Cards */
+  .order-card {
+    @apply transition-all duration-200 hover:shadow-lg bg-card border-border;
+  }
+
+  .order-card-priority-1 {
+    @apply border-border;
+  }
+
+  .order-card-priority-2 {
+    @apply border-blue-400;
+  }
+
+  .order-card-priority-3 {
+    @apply border-yellow-400;
+  }
+
+  .order-card-priority-4 {
+    @apply border-orange-400;
+  }
+
+  .order-card-priority-5 {
+    @apply border-destructive;
+  }
+
+  /* PhoneInput styling - fix focus overlap */
+  .PhoneInput {
+    display: flex;
+    align-items: center;
+  }
+
+  .PhoneInput--focused:not(.PhoneInput--disabled) {
+    box-shadow: inset 0 0 0 2px var(--ring, hsl(345 55% 31%));
+  }
+
+  .PhoneInputInput {
+    box-sizing: border-box;
+  }
+
+  .PhoneInputInput:focus {
+    outline: none;
+    box-shadow: inset 0 0 0 2px var(--ring, hsl(345 55% 31%));
+  }
+
+  /* Ensure form sections have proper z-index and don't get overlapped */
+  .space-y-4 > div {
+    position: relative;
+    z-index: auto;
+  }
+
+  /* Form input wrapper styling */
+  .pb-3 {
+    box-sizing: border-box;
+  }
+
+  .pb-3 input,
+  .pb-3 textarea,
+  .pb-3 .PhoneInputInput {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Prevent browser autocomplete from overlapping */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Ensure proper layout for focused inputs */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  textarea {
+    transition: box-shadow 0.15s ease-in-out;
+  }
+
+  .order-card-overdue {
+    @apply border-destructive bg-destructive/5;
+  }
+
+  .order-card-ready {
+    @apply ring-2 ring-green-500/50 border-green-500/50;
+  }
+
+  /* Order Items */
+  .order-item {
+    @apply flex items-center justify-between p-2 bg-muted/50 rounded border border-border;
+  }
+
+  .order-item-name {
+    @apply font-medium text-foreground;
+  }
+
+  .order-item-instructions {
+    @apply text-xs text-orange-600 mt-1 font-medium;
+  }
+
+  .order-item-modifications {
+    @apply text-xs text-blue-600 mt-1;
+  }
+
+  .order-item-allergens {
+    @apply text-xs text-destructive mt-1 font-medium;
+  }
+
+  /* Status Indicators */
+  .status-indicator-pending {
+    @apply bg-muted;
+  }
+
+  .status-indicator-confirmed {
+    @apply bg-blue-500;
+  }
+
+  .status-indicator-preparing {
+    @apply bg-yellow-500;
+  }
+
+  .status-indicator-ready {
+    @apply bg-green-500;
+  }
+
+  .status-indicator-served {
+    @apply bg-purple-500;
+  }
+
+  .status-indicator-completed {
+    @apply bg-muted;
+  }
+
+  .status-indicator-cancelled {
+    @apply bg-destructive;
+  }
+
+  /* Dietary and Special Requirements */
+  .dietary-requirements {
+    @apply flex items-center gap-2 p-2 bg-blue-50 rounded border border-blue-200;
+  }
+
+  .dietary-requirements-icon {
+    @apply h-4 w-4 text-blue-600;
+  }
+
+  .dietary-requirements-text {
+    @apply text-sm font-medium text-blue-800;
+  }
+
+  .special-instructions {
+    @apply border-yellow-300 bg-yellow-50;
+  }
+
+  .special-instructions-icon {
+    @apply h-4 w-4 text-yellow-600;
+  }
+
+  .special-instructions-text {
+    @apply font-medium text-yellow-800;
+  }
+
+  /* Timing Indicators */
+  .timing-normal {
+    @apply text-green-600;
+  }
+
+  .timing-warning {
+    @apply text-yellow-600;
+  }
+
+  .timing-overdue {
+    @apply text-destructive;
+  }
+
+  /* Connection Status */
+  .connection-connected {
+    @apply text-green-500;
+  }
+
+  .connection-disconnected {
+    @apply text-destructive;
+  }
+
+  /* Order Entry Modal */
+  .order-entry-modal {
+    @apply max-w-6xl h-[90vh] flex flex-col;
+  }
+
+  .menu-item-card {
+    @apply cursor-pointer hover:shadow-md transition-shadow bg-card border-border hover:border-primary/50;
+  }
+
+  .menu-item-name {
+    @apply font-medium text-sm text-card-foreground;
+  }
+
+  .menu-item-price {
+    @apply font-bold text-sm text-card-foreground;
+  }
+
+  .order-summary-card {
+    @apply bg-card border-border;
+  }
+
+  .order-total-section {
+    @apply border-t border-border pt-4;
+  }
+
+  .order-total-text {
+    @apply text-foreground;
+  }
+
+  /* Print Styles */
+  .print-button {
+    @apply px-4 py-2 bg-primary text-primary-foreground text-xs rounded hover:bg-primary/90 transition-colors;
+  }
+
+  /* Tablet Optimizations */
+  @media (max-width: 1024px) and (orientation: landscape) {
+    .kitchen-display {
+      @apply text-base;
+    }
+
+    .order-card {
+      @apply p-3;
+    }
+
+    .kitchen-header {
+      @apply px-3 py-2;
+    }
+
+    .kitchen-station-tabs {
+      @apply px-3 py-1;
+    }
+  }
+
+  /* High Priority Alerts */
+  .priority-alert {
+    @apply bg-destructive/10 border border-destructive/30 rounded;
+  }
+
+  .priority-alert-icon {
+    @apply h-4 w-4 text-destructive;
+  }
+
+  .priority-alert-text {
+    @apply text-destructive font-bold text-xs;
+  }
+
+  /* Allergen Alerts */
+  .allergen-alert {
+    @apply bg-orange-100 border border-orange-300 rounded;
+  }
+
+  .allergen-alert-icon {
+    @apply h-4 w-4 text-orange-600;
+  }
+
+  .allergen-alert-text {
+    @apply text-orange-800 font-bold text-xs;
+  }
+
+  /* Empty States */
+  .empty-state {
+    @apply text-center py-12;
+  }
+
+  .empty-state-icon {
+    @apply h-12 w-12 mx-auto text-muted-foreground mb-4;
+  }
+
+  .empty-state-title {
+    @apply text-lg text-muted-foreground;
+  }
+
+  .empty-state-description {
+    @apply text-sm text-muted-foreground/70;
+  }
+
+  /* Loading States */
+  .loading-spinner {
+    @apply h-8 w-8 animate-spin mx-auto mb-4;
+  }
+
+  /* Focus and Accessibility */
+  .focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Print Media Queries */
+  @media print {
+    .print-hidden {
+      @apply hidden;
+    }
+
+    .print-visible {
+      @apply block;
+    }
+
+    .order-ticket {
+      @apply shadow-none border-black;
+    }
+  }
+}
+
+/* Light mode only - no dark mode support */
+
+/* Ensure proper contrast in all modes */
+@layer utilities {
+  .text-contrast {
+    @apply text-foreground;
+  }
+
+  .bg-contrast {
+    @apply bg-card;
+  }
+
+  .border-contrast {
+    @apply border-border;
+  }
+
+  .hover-contrast {
+    @apply hover:bg-muted/50;
+  }
+}
+
+/* Custom scrollbar */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Floorplan Status Utilities */
+@layer utilities {
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-elevated {
+    box-shadow: var(--shadow-lg);
+  }
+
+  .bg-status-available {
+    background-color: hsl(var(--status-available));
+  }
+
+  .bg-status-taken {
+    background-color: hsl(var(--status-taken));
+  }
+
+  .bg-status-overstay {
+    background-color: hsl(var(--status-overstay));
+  }
+
+  .bg-status-reserved {
+    background-color: hsl(var(--status-reserved));
+  }
+
+  .bg-status-seated {
+    background-color: hsl(var(--status-seated));
+  }
+
+  .bg-status-dirty {
+    background-color: hsl(var(--status-dirty));
+  }
+
+  .bg-status-blocked {
+    background-color: hsl(var(--status-blocked));
+  }
+
+  .ring-status-available {
+    --tw-ring-color: hsl(var(--status-available));
+  }
+
+  @keyframes pulse-soft {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  .animate-pulse-soft {
+    animation: pulse-soft 2s ease-in-out infinite;
+  }
+
+  @keyframes request-pulse {
+    0%, 100% {
+      box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+    }
+    50% {
+      box-shadow: 0 0 0 6px rgba(245, 158, 11, 0);
+    }
+  }
+
+  .animate-request-pulse {
+    animation: request-pulse 2s ease-in-out infinite;
+  }
+
+  /* Override Tailwind ring utilities for input elements */
+  input:focus,
+  textarea:focus,
+  select:focus,
+  [type="text"]:focus,
+  [type="email"]:focus,
+  [type="tel"]:focus,
+  [type="number"]:focus {
+    --tw-ring-color: transparent !important;
+    --tw-ring-opacity: 0 !important;
+    outline: none !important;
+    box-shadow: inset 0 0 0 2px hsl(345 55% 31%) !important;
+  }
+}
+
+/* Custom animations */
+@keyframes slide-in-from-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-from-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-from-right 0.3s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-from-left 0.3s ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.2s ease-out;
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.625rem;
+  /* New Brand Color Palette - OKLCH format */
+  --background: oklch(0.97 0.03 65); /* off white */
+  --foreground: oklch(0.31 0.15 345); /* Mulberry Velvet */
+  --card: oklch(0.96 0.05 25); /* Light Blushed Linen */
+  --card-foreground: oklch(0.31 0.15 345); /* Mulberry Velvet */
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.31 0.15 345); /* Mulberry Velvet */
+  --primary: oklch(0.31 0.15 345); /* Mulberry Velvet */
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.94 0.08 25); /* Blushed Linen */
+  --secondary-foreground: oklch(0.31 0.15 345); /* Mulberry Velvet */
+  --muted: oklch(0.96 0.05 25); /* Lighter Blushed Linen */
+  --muted-foreground: oklch(0.47 0 0); /* Charcoal Mood */
+  --accent: oklch(0.81 0.05 295); /* Lavender Fog */
+  --accent-foreground: oklch(0.31 0.15 345); /* Mulberry Velvet */
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.88 0.03 25); /* Subtle Blushed Linen */
+  --input: oklch(0.88 0.03 25); /* Subtle Blushed Linen */
+  --ring: oklch(0.31 0.15 345); /* Mulberry Velvet */
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.97 0.03 65); /* off white */
+  --sidebar-foreground: oklch(0.31 0.15 345); /* Mulberry Velvet */
+  --sidebar-primary: oklch(0.31 0.15 345); /* Mulberry Velvet */
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.94 0.08 25); /* Blushed Linen */
+  --sidebar-accent-foreground: oklch(0.31 0.15 345); /* Mulberry Velvet */
+  --sidebar-border: oklch(0.88 0.03 25); /* Subtle Blushed Linen */
+  --sidebar-ring: oklch(0.31 0.15 345); /* Mulberry Velvet */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* PWA Orientation handling */
+@media screen and (orientation: portrait) and (max-width: 768px) {
+  .landscape-only-message {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: hsl(var(--background));
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .landscape-only-message .rotate-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: rotate 2s infinite linear;
+  }
+  
+  @keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+}
+
+@media screen and (orientation: landscape) {
+  .landscape-only-message {
+    display: none;
+  }
+}
+
+/* PWA Standalone Mode Optimizations */
+@media (display-mode: standalone) {
+  body {
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: none;
+  }
+
+  /* Hide scrollbars in standalone mode */
+  ::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
+
+  /* Prevent pull-to-refresh */
+  html, body {
+    overscroll-behavior-y: contain;
+  }
+}
+
+/* CRITICAL: Global touch optimization for tablets (8-inch screens) */
+/* Prevent iOS double-tap zoom on all interactive elements */
+button, a, [role="button"], [role="link"], [role="tab"], input, select, textarea, label {
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Ensure ALL interactive elements meet minimum touch target size (Apple HIG) */
+button,
+a,
+[role="button"],
+[role="link"],
+[role="tab"],
+[type="button"],
+[type="submit"],
+[type="reset"] {
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+}
+
+/* Tablet-specific optimizations for 8-inch screens */
+@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+  body {
+    font-size: 16px; /* Optimal for tablet reading */
+  }
+
+  /* Enhanced touch targets for tablet */
+  button, [role="button"], a, input, select, textarea {
+    min-height: 48px;
+    min-width: 48px;
+  }
+
+  /* Larger tap targets for frequently used actions */
+  .primary-action, [data-primary="true"] {
+    min-height: 52px;
+    min-width: 52px;
+  }
+}
+
+/* PhoneInput Component Styling */
+.PhoneInput {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 0.5rem;
+}
+
+.PhoneInputInput {
+  flex: 1;
+}
+
+.PhoneInputCountry {
+  display: flex;
+  align-items: center;
+  margin-right: 0;
+  position: relative;
+  align-self: stretch;
+}
+
+.PhoneInputCountryIcon {
+  width: 1.5em;
+  height: 1em;
+}
+
+.PhoneInputCountryIcon--border {
+  background-color: rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.5);
+}
+
+.PhoneInputCountryIconImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.PhoneInputCountrySelect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+  border: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.PhoneInputCountrySelectArrow {
+  display: block;
+  content: '';
+  width: 0.3em;
+  height: 0.3em;
+  margin-left: 0.35em;
+  border-style: solid;
+  border-color: currentColor;
+  border-top-width: 0;
+  border-bottom-width: 1px;
+  border-left-width: 0;
+  border-right-width: 1px;
+  transform: rotate(45deg);
+  opacity: 0.45;
+}
+
+.PhoneInput--error .PhoneInputCountrySelect,
+.PhoneInput--error .PhoneInputInput {
+  border-color: hsl(var(--destructive));
+}
+
+/* Ensure PhoneInputContainer only shows one input field */
+.PhoneInputContainer {
+  width: 100%;
+}
+
+.PhoneInputContainer .PhoneInput {
+  display: flex;
+  align-items: stretch;
+}
+
+.PhoneInputContainer .PhoneInputInput {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Floorplan Service View Animations */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}

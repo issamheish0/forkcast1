@@ -1,0 +1,20 @@
+// Stub: Airbridge tracking — not implemented in ForkCastApp
+export const airbridgeTracker = {
+  initialize: async (_callback?: any) => {},
+  trackAppOpen: () => {},
+  trackEvent: (_name: string, _data?: any) => {},
+  trackBookingConfirmed: (_data?: any) => {},
+  trackBookingCreated: (_data?: any) => {},
+  trackRestaurantViewed: (_data?: any) => {},
+  trackReviewSubmitted: (_data?: any) => {},
+  trackWaitlistJoined: (_data?: any) => {},
+  trackFavoriteAdded: (_data?: any) => {},
+  trackFavoriteRemoved: (_data?: any) => {},
+  setUserId: (_userId: string) => {},
+  clearUserId: () => {},
+  trackSignUp: (_data?: any) => {},
+  trackSignIn: (_data?: any) => {},
+  trackSignOut: () => {},
+  trackBookingFunnelStep: (_step?: any, _data?: any) => {},
+  trackWaitlistFunnelStep: (_step?: any, _data?: any) => {},
+};

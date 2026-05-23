@@ -1,0 +1,12 @@
+// components/floorplan/index.ts
+export { FloorplanCanvas } from './floorplan-canvas'
+export { FloorplanListView } from './floorplan-list-view'
+export { FloorplanTable } from './floorplan-table'
+export { BookingsPanel } from './bookings-panel'
+export { TableDetailSheet } from './table-detail-sheet'
+export { BookingDetailsDrawer } from './booking-details-drawer'
+export { NewBookingModal } from './new-booking-modal'
+export { AssignModeBanner } from './assign-mode-banner'
+export { CapacityWarningDialog } from './capacity-warning-dialog'
+export { RuleFormDialog } from './rule-form-dialog'
+export { ShiftSelector } from './shift-selector'

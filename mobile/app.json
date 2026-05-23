@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "ForkCast",
+    "slug": "forkcast-mobile",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "forkcast",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": { "supportsTablet": true, "bundleIdentifier": "com.forkcast.mobile" },
+    "android": { "package": "com.forkcast.mobile" },
+    "web": { "bundler": "metro" },
+    "plugins": ["expo-router", "expo-secure-store"],
+    "experiments": { "typedRoutes": true }
+  }
+}

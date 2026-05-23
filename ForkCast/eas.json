@@ -1,0 +1,37 @@
+﻿{
+  "cli": {
+    "version": ">= 12.1.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "channel": "development",
+      "env": {
+        "NODE_ENV": "development",
+        "EXPO_PUBLIC_SUPABASE_URL": "https://vyhfdvldyefwnsnzvzyw.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ5aGZkdmxkeWVmd25zbnp2enl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNTQ2MzksImV4cCI6MjA5MzczMDYzOX0.IMH8bv6s4pOhNWJtfpJ3QQmSPLxnflRqUg9oTqvyiUc",
+        "EXPO_PUBLIC_ONESIGNAL_APP_ID": "YOUR_ONESIGNAL_APP_ID",
+        "NEXT_PUBLIC_GOOGLE_MAPS_API_KEY": "YOUR_GOOGLE_MAPS_API_KEY",
+        "NEXT_PUBLIC_SUPABASE_URL": "https://vyhfdvldyefwnsnzvzyw.supabase.co",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ5aGZkdmxkeWVmd25zbnp2enl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNTQ2MzksImV4cCI6MjA5MzczMDYzOX0.IMH8bv6s4pOhNWJtfpJ3QQmSPLxnflRqUg9oTqvyiUc",
+        "SUPABASE_PROJECT_ID": "vyhfdvldyefwnsnzvzyw"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "channel": "preview",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "production": {
+      "autoIncrement": true,
+      "channel": "production",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  },
+  "submit": {}
+}

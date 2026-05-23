@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#3b82f6" rx="64"/>
+  <g fill="white">
+    <!-- Restaurant Table -->
+    <rect x="128" y="204" width="256" height="172" rx="20" fill="white" opacity="0.9"/>
+    <!-- Chairs -->
+    <rect x="108" y="236" width="32" height="108" rx="16" fill="white"/>
+    <rect x="372" y="236" width="32" height="108" rx="16" fill="white"/>
+    <rect x="204" y="180" width="104" height="32" rx="16" fill="white"/>
+    <rect x="204" y="388" width="104" height="32" rx="16" fill="white"/>
+    <!-- RBS Text -->
+    <text x="256" y="310" text-anchor="middle" fill="#3b82f6" font-family="Arial, sans-serif" font-size="54" font-weight="bold">RBS</text>
+  </g>
+</svg>

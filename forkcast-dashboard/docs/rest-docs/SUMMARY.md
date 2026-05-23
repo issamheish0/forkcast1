@@ -1,0 +1,15 @@
+# Table of contents
+
+* [Welcome to Plate](README.md)
+* [Getting started with Plate](<README (1).md>)
+* [core-features](core-features/README.md)
+  * [Basic Dashboard](core-features/dashboard.md)
+  * [Reservations](core-features/reservations.md)
+  * [Card guarantee](core-features/card-guarantee.md)
+  * [Deposits](core-features/deposits.md)
+  * [Settings](core-features/settings.md)
+* [add-ons](add-ons/README.md)
+  * [Guest CRM (Add‑on)](add-ons/guest-crm.md)
+  * [Floor Plan (Add‑on)](add-ons/floor-plan.md)
+* [support](support/README.md)
+  * [Frequently Asked Questions](support/faq.md)

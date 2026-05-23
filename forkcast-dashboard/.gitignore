@@ -1,0 +1,81 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Android / Bubblewrap
+# Build artifacts - DO NOT COMMIT
+*.apk
+*.aab
+*.idsig
+app/build/
+.gradle/
+build/
+
+# Android signing keystore - SECURITY: DO NOT COMMIT
+android.keystore
+*.keystore
+*.jks
+
+# Generated files
+manifest-checksum.txt
+store_icon.png
+
+# Gradle wrapper jar (optional - some prefer to commit this)
+# gradle/wrapper/gradle-wrapper.jar
+
+
+.github/copilot-instructions.md
+
+#Ignore vscode AI rules
+.github\instructions\codacy.instructions.md
+
+.superpowers/
+.mcp.json
+.codacy/cli.sh
+.codacy/codacy.yaml
+.codacy/codacy.yaml
+.codacy/codacy.yaml
+.vscode/mcp.json
+.github/copilot-instructions.md
+.github/copilot-instructions.md
+.codacy/codacy.yaml
+.github/instructions/codacy.instructions.md
+.codacy/codacy.yaml

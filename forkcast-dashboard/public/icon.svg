@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#3b82f6" rx="64"/>
+  <g fill="white">
+    <!-- Restaurant/dining icon -->
+    <path d="M128 160h32v192h-32V160zm48 0h32v192h-32V160zm48 0h32v192h-32V160z" opacity="0.8"/>
+    <circle cx="256" cy="256" r="80" opacity="0.6"/>
+    <path d="M200 200h112c8.837 0 16 7.163 16 16v80c0 8.837-7.163 16-16 16H200c-8.837 0-16-7.163-16-16v-80c0-8.837 7.163-16 16-16z"/>
+    <text x="256" y="280" text-anchor="middle" fill="#3b82f6" font-family="Arial, sans-serif" font-size="24" font-weight="bold">RBS</text>
+  </g>
+</svg>

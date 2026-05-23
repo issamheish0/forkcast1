@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* New Brand Color Palette */
+    --background: 45 29% 97%; /* off white */
+    --foreground: 345 55% 31%; /* Mulberry Velvet */
+    --card: 25 50% 96%; /* Light Blushed Linen */
+    --card-foreground: 345 55% 31%; /* Mulberry Velvet */
+    --card-gradient-from: 25 65% 96%; /* Lighter gradient start */
+    --card-gradient-to: 25 50% 91%; /* Slightly deeper gradient end */
+    --popover: 0 0% 100%;
+    --popover-foreground: 345 55% 31%; /* Mulberry Velvet */
+    --primary: 345 55% 31%; /* Mulbery Velvet */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 25 100% 94%; /* Blushed Linen */
+    --secondary-foreground: 345 55% 31%; /* Mulberry Velvet */
+    --muted: 25 50% 96%; /* Lighter Blushed Linen */
+    --muted-foreground: 0 0% 47%; /* Charcoal Mood */
+    --accent: 295 30% 81%; /* Lavender Fog */
+    --accent-foreground: 345 55% 31%; /* Mulberry Velvet */
+    --destructive: 0 80% 57.7%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 25 30% 88%; /* Subtle Blushed Linen */
+    --input: 25 30% 88%; /* Subtle Blushed Linen */
+    --ring: 345 55% 31%; /* Mulberry Velvet */
+  }
+
+  .dark:root {
+    /* Dark Mode Brand Color Palette */
+    --background: 345 27% 6%; /* Deep Mulberry background */
+    --foreground: 25 40% 92%; /* Light warm foreground */
+    --card: 345 20% 12%; /* Dark card background */
+    --card-foreground: 25 40% 92%; /* Light warm foreground */
+    --card-gradient-from: 345 25% 14%; /* Lighter gradient start */
+    --card-gradient-to: 345 15% 10%; /* Deeper gradient end */
+    --popover: 345 20% 10%; /* Darker popover */
+    --popover-foreground: 25 40% 92%; /* Light warm foreground */
+    --primary: 345 55% 31%; /* Mulberry Velvet (same as light) */
+    --primary-foreground: 25 40% 95%; /* Light warm text */
+    --secondary: 345 15% 18%; /* Dark secondary */
+    --secondary-foreground: 25 30% 85%; /* Muted light text */
+    --muted: 345 15% 15%; /* Dark muted background */
+    --muted-foreground: 25 15% 65%; /* Muted foreground */
+    --accent: 295 25% 35%; /* Darker Lavender Fog */
+    --accent-foreground: 25 40% 92%; /* Light warm foreground */
+    --destructive: 0 65% 55%; /* Slightly muted destructive */
+    --destructive-foreground: 25 40% 95%; /* Light warm text */
+    --border: 345 15% 20%; /* Dark border */
+    --input: 345 15% 18%; /* Dark input background */
+    --ring: 345 55% 31%; /* Mulberry Velvet ring */
+  }
+}

@@ -1,0 +1,121 @@
+﻿{
+  "expo": {
+    "name": "ForkCast",
+    "slug": "ForkCast",
+    "scheme": "forkcast",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "usesAppleSignIn": true,
+      "bundleIdentifier": "com.ForkCast.app",
+      "splash": {
+        "backgroundColor": "#ffece2"
+      },
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "ForkCast uses your location to find nearby restaurants and provide personalized recommendations.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "ForkCast uses your location to find nearby restaurants and provide personalized recommendations.",
+        "NSContactsUsageDescription": "ForkCast needs optional access to your contacts only when you ask it to import guests or share a reservation.",
+        "NSCalendarsUsageDescription": "ForkCast needs access to your calendar to add restaurant reservations with reminder notifications.",
+        "NSCameraUsageDescription": "ForkCast needs access to your camera to take photos for your dining posts and reviews.",
+        "NSPhotoLibraryUsageDescription": "ForkCast needs access to your photo library to share photos of your dining experiences.",
+        "NSPhotoLibraryAddUsageDescription": "ForkCast needs access to save photos to your photo library from your dining experiences.",
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": ["ForkCast", "com.ForkCast.app"]
+          }
+        ],
+        "LSApplicationQueriesSchemes": ["mailto", "tel", "sms", "https", "http", "whatsapp"],
+        "UIBackgroundModes": ["remote-notification"]
+      },
+      "icon": {
+        "light": "./assets/icon.png",
+        "dark": "./assets/icon-dark.png"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/android-icon.jpeg",
+        "backgroundColor": "#7d1f3d"
+      },
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.INTERNET",
+        "android.permission.VIBRATE",
+        "android.permission.READ_CALENDAR",
+        "android.permission.WRITE_CALENDAR"
+      ],
+      "splash": {
+        "backgroundColor": "#ffece2"
+      },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            { "scheme": "forkcast" },
+            { "scheme": "ForkCast" },
+            { "scheme": "com.ForkCast.app" }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        },
+        {
+          "action": "VIEW",
+          "autoVerify": false,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "vyhfdvldyefwnsnzvzyw.supabase.co",
+              "pathPrefix": "/auth/v1/callback"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ],
+      "package": "com.ForkCast.app"
+    },
+    "newArchEnabled": true,
+    "experiments": {
+      "typedRoutes": true
+    },
+    "plugins": [
+      "expo-router",
+      "expo-apple-authentication",
+      "expo-secure-store",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "ForkCast uses your location to find nearby restaurants and provide personalized recommendations.",
+          "isIosBackgroundLocationEnabled": false,
+          "isAndroidBackgroundLocationEnabled": false
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#7d1f3d"
+        }
+      ],
+      "expo-calendar",
+      "expo-web-browser",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "ForkCast needs access to your photo library to share photos of your dining experiences.",
+          "cameraPermission": "ForkCast needs access to your camera to take photos for your dining posts and reviews.",
+          "microphonePermission": false
+        }
+      ],
+      "./plugins/withAndroidManifestFix"
+    ],
+    "extra": {
+      "router": {}
+    }
+  }
+}

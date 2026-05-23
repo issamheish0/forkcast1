@@ -5,9 +5,10 @@ import { BookingsClient } from "./bookings-client";
 export default async function BookingsPage() {
   const supabase = await getServerSupabase();
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/sign-in");
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session) redirect("/sign-in");
+  const user = session.user;
 
   // Find the restaurants this user manages
   const { data: ownedRestaurants } = await supabase

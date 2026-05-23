@@ -36,9 +36,10 @@ export default async function AnalyticsPage({
 
   const supabase = await getServerSupabase();
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/sign-in");
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session) redirect("/sign-in");
+  const user = session.user;
 
   const { data: ownedRestaurants } = await supabase
     .from("restaurants")

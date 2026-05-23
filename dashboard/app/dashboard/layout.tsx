@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { SignOutButton } from "@/components/sign-out-button";
 import { MobileNav } from "@/components/mobile-nav";
+import { SidebarNav } from "@/components/sidebar-nav";
 
 export default async function DashboardLayout({
   children,
@@ -10,24 +11,20 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const supabase = await getServerSupabase();
+  // getSession() decodes the JWT from the cookie locally — no network call.
+  // The middleware already validates the token server-side on every request.
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/sign-in");
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session) redirect("/sign-in");
+  const user = session.user;
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("full_name")
-    .eq("id", user.id)
-    .maybeSingle();
+  const [profileResult, restaurantsResult] = await Promise.all([
+    supabase.from("profiles").select("full_name").eq("id", user.id).maybeSingle(),
+    supabase.from("restaurants").select("id, name").eq("owner_id", user.id),
+  ]);
 
-  // Fetch the restaurant(s) the user owns or is staff of
-  const { data: ownedRestaurants } = await supabase
-    .from("restaurants")
-    .select("id, name")
-    .eq("owner_id", user.id);
-
-  const restaurant = ownedRestaurants?.[0] ?? null;
+  const restaurant = restaurantsResult.data?.[0] ?? null;
 
   return (
     <div className="flex min-h-screen">
@@ -35,13 +32,7 @@ export default async function DashboardLayout({
         <Link href="/dashboard" className="text-xl font-bold text-primary">
           ForkCast
         </Link>
-        <nav className="mt-8 flex flex-col gap-1">
-          <NavLink href="/dashboard">Overview</NavLink>
-          <NavLink href="/dashboard/bookings">Bookings</NavLink>
-          <NavLink href="/dashboard/analytics">Analytics</NavLink>
-          <NavLink href="/dashboard/customers">Customers</NavLink>
-          <NavLink href="/dashboard/settings">Settings</NavLink>
-        </nav>
+        <SidebarNav />
 
         <div className="mt-auto pt-6">
           <div className="rounded-lg bg-secondary p-3">
@@ -51,7 +42,7 @@ export default async function DashboardLayout({
             </p>
           </div>
           <div className="mt-3 rounded-lg p-3">
-            <p className="truncate text-sm text-foreground">{profile?.full_name}</p>
+            <p className="truncate text-sm text-foreground">{profileResult.data?.full_name}</p>
             <p className="truncate text-xs text-muted-foreground">{user.email}</p>
             <SignOutButton />
           </div>
@@ -60,16 +51,5 @@ export default async function DashboardLayout({
 
       <main className="flex-1 overflow-x-hidden">{children}</main>
     </div>
-  );
-}
-
-function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
-  return (
-    <Link
-      href={href}
-      className="rounded-lg px-3 py-2 text-sm font-medium text-foreground hover:bg-secondary"
-    >
-      {children}
-    </Link>
   );
 }

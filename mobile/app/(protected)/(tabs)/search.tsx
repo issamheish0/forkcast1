@@ -34,6 +34,7 @@ export default function Search() {
       (r) =>
         r.name.toLowerCase().includes(q) ||
         (r.cuisine_type ?? "").toLowerCase().includes(q) ||
+        (r.cuisine_types ?? []).some((c) => c.toLowerCase().includes(q)) ||
         (r.address ?? "").toLowerCase().includes(q),
     );
   }, [restaurants, query]);
@@ -41,8 +42,7 @@ export default function Search() {
   return (
     <SafeAreaView className="flex-1 bg-background" edges={["bottom"]}>
       <View className="p-6">
-        <Text className="text-2xl font-bold text-foreground">Search</Text>
-        <View className="mt-4 flex-row items-center gap-2 rounded-xl border border-border bg-card px-3">
+          <View className="flex-row items-center gap-2 rounded-xl border border-border bg-card px-3">
           <SearchIcon size={18} color="#7A6A6E" />
           <TextInput
             value={query}

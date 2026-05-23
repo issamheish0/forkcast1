@@ -36,7 +36,6 @@ export default function Favorites() {
   return (
     <SafeAreaView className="flex-1 bg-background" edges={["bottom"]}>
       <View className="px-6 pt-4">
-        <Text className="text-2xl font-bold text-foreground">Favorites</Text>
         <Text className="mt-1 text-muted-foreground">Your saved restaurants.</Text>
       </View>
 

@@ -42,7 +42,12 @@ export default function Home() {
   const cuisines = useMemo(
     () =>
       Array.from(
-        new Set(restaurants.map((r) => r.cuisine_type).filter(Boolean) as string[]),
+        new Set(
+          restaurants.flatMap((r) => [
+            ...(r.cuisine_type ? [r.cuisine_type] : []),
+            ...(r.cuisine_types ?? []),
+          ]),
+        ),
       ).sort(),
     [restaurants],
   );
@@ -50,7 +55,11 @@ export default function Home() {
   const filtered = useMemo(
     () =>
       selectedCuisine
-        ? restaurants.filter((r) => r.cuisine_type === selectedCuisine)
+        ? restaurants.filter(
+            (r) =>
+              r.cuisine_type === selectedCuisine ||
+              (r.cuisine_types ?? []).includes(selectedCuisine),
+          )
         : restaurants,
     [restaurants, selectedCuisine],
   );
@@ -73,9 +82,7 @@ export default function Home() {
         contentContainerClassName="pb-12"
       >
         <View className="px-6 pt-4">
-          <Text className="text-sm text-muted-foreground">
-            Hello{profile?.full_name ? `, ${profile.full_name.split(" ")[0]}` : ""} 👋
-          </Text>
+          
           <Text className="text-2xl font-bold text-foreground">Find your next table</Text>
         </View>
 

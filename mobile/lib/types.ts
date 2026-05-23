@@ -1,3 +1,35 @@
+export type MenuType = "pdf" | "image" | "manual";
+
+export type MenuItem = {
+  id: string;
+  menu_id: string;
+  name: string;
+  description: string | null;
+  price: number | null;
+  category: string | null;
+  position: number;
+  created_at: string;
+};
+
+export type Menu = {
+  id: string;
+  restaurant_id: string;
+  name: string;
+  type: MenuType;
+  url: string | null;
+  position: number;
+  created_at: string;
+  menu_items?: MenuItem[];
+};
+
+export type RestaurantImage = {
+  id: string;
+  restaurant_id: string;
+  url: string;
+  position: number;
+  created_at: string;
+};
+
 export type Restaurant = {
   id: string;
   owner_id: string | null;
@@ -7,6 +39,7 @@ export type Restaurant = {
   latitude: number | null;
   longitude: number | null;
   cuisine_type: string | null;
+  cuisine_types: string[];
   price_range: number | null;
   average_rating: number | null;
   main_image_url: string | null;
@@ -16,6 +49,8 @@ export type Restaurant = {
   max_party_size: number;
   created_at: string;
   updated_at: string;
+  // joined via restaurant_images table
+  restaurant_images?: RestaurantImage[];
 };
 
 export type Profile = {

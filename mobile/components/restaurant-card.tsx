@@ -2,6 +2,11 @@ import { Image, Pressable, Text, View } from "react-native";
 import { Star } from "lucide-react-native";
 import { Restaurant } from "@/lib/types";
 
+function cuisineLabel(restaurant: Restaurant) {
+  const extra = restaurant.cuisine_types?.length ?? 0;
+  return `${restaurant.cuisine_type ?? "—"}${extra > 0 ? ` +${extra}` : ""}`;
+}
+
 export function RestaurantCard({
   restaurant,
   onPress,
@@ -26,7 +31,7 @@ export function RestaurantCard({
             {restaurant.name}
           </Text>
           <Text className="text-sm text-muted-foreground" numberOfLines={1}>
-            {restaurant.cuisine_type} · {"$".repeat(restaurant.price_range ?? 2)}
+            {cuisineLabel(restaurant)} · {"$".repeat(restaurant.price_range ?? 2)}
           </Text>
           <View className="mt-1 flex-row items-center gap-1">
             <Star size={14} color="#EAB308" fill="#EAB308" />
@@ -53,7 +58,7 @@ export function RestaurantCard({
           {restaurant.name}
         </Text>
         <Text className="text-sm text-muted-foreground" numberOfLines={1}>
-          {restaurant.cuisine_type} · {"$".repeat(restaurant.price_range ?? 2)}
+          {cuisineLabel(restaurant)} · {"$".repeat(restaurant.price_range ?? 2)}
         </Text>
         <View className="mt-1 flex-row items-center gap-1">
           <Star size={14} color="#EAB308" fill="#EAB308" />
@@ -66,3 +71,4 @@ export function RestaurantCard({
     </Pressable>
   );
 }
+

@@ -5,9 +5,10 @@ import { OverviewClient } from "./overview-client";
 export default async function DashboardOverview() {
   const supabase = await getServerSupabase();
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/sign-in");
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session) redirect("/sign-in");
+  const user = session.user;
 
   const { data: restaurants } = await supabase
     .from("restaurants")
